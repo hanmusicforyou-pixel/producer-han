@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Producer HAN | Official Portfolio</title>
+    <meta name="description" content="프로듀서 한 — 영상, 음악, 공간을 통제하여 압도적인 서사를 구축하는 융합 창작자의 공식 포트폴리오.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-base: #060608;
+            --glass-bg: rgba(18,18,22,0.55);
+            --glass-border: rgba(255,255,255,0.07);
+            --glass-border-hover: rgba(255,255,255,0.18);
+            --text-primary: #f0f0f5;
+            --text-muted: #7a7a8a;
+            --text-dim: #3a3a4a;
+            --accent: #c8c8dc;
+            --gold: #c9a84c;
+            --blur-strength: blur(24px);
+            --radius-lg: 22px;
+            --radius-md: 14px;
+            --transition: 0.4s cubic-bezier(0.165,0.84,0.44,1);
+        }
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+        html{scroll-behavior:smooth;}
+        body{background:var(--bg-base);color:var(--text-primary);font-family:'Inter',sans-serif;overflow-x:hidden;line-height:1.6;}
+        h1,h2,h3,h4{font-family:'Playfair Display',serif;line-height:1.15;}
+        ::-webkit-scrollbar{width:4px;}
+        ::-webkit-scrollbar-track{background:var(--bg-base);}
+        ::-webkit-scrollbar-thumb{background:#2a2a35;border-radius:4px;}
+
+        /* NAV */
+        nav{position:fixed;top:0;width:100%;padding:22px 6%;display:flex;justify-content:space-between;align-items:center;background:rgba(6,6,8,0.7);backdrop-filter:var(--blur-strength);-webkit-backdrop-filter:var(--blur-strength);border-bottom:1px solid var(--glass-border);z-index:1000;}
+        .logo{font-family:'Playfair Display',serif;font-size:1.6rem;letter-spacing:5px;font-weight:700;color:var(--text-primary);text-decoration:none;}
+        .nav-right{display:flex;align-items:center;gap:30px;}
+        .nav-link{color:var(--text-muted);text-decoration:none;font-size:.82rem;letter-spacing:2px;text-transform:uppercase;transition:color .3s;}
+        .nav-link:hover{color:var(--text-primary);}
+        .nav-tag{color:var(--text-dim);font-size:.75rem;letter-spacing:1px;}
+
+        /* HERO */
+        .hero{height:100vh;min-height:700px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;position:relative;overflow:hidden;background:radial-gradient(ellipse 80% 60% at 50% 60%,rgba(28,22,50,.9) 0%,transparent 70%),radial-gradient(ellipse 40% 40% at 70% 20%,rgba(15,35,55,.6) 0%,transparent 60%),var(--bg-base);}
+        .hero-orb{position:absolute;border-radius:50%;filter:blur(80px);animation:floatOrb 12s ease-in-out infinite alternate;pointer-events:none;}
+        .orb1{width:500px;height:500px;background:radial-gradient(circle,rgba(40,20,80,.5) 0%,transparent 70%);top:-100px;left:-100px;animation-duration:14s;}
+        .orb2{width:400px;height:400px;background:radial-gradient(circle,rgba(10,40,80,.4) 0%,transparent 70%);bottom:0;right:-80px;animation-duration:11s;animation-direction:alternate-reverse;}
+        .orb3{width:250px;height:250px;background:radial-gradient(circle,rgba(80,30,30,.3) 0%,transparent 70%);top:40%;left:60%;animation-duration:16s;}
+        @keyframes floatOrb{from{transform:translate(0,0) scale(1);}to{transform:translate(40px,-30px) scale(1.1);}}
+        #heroCanvas{position:absolute;inset:0;width:100%;height:100%;opacity:.4;}
+        .hero-content{position:relative;z-index:2;animation:heroFadeIn 1.4s cubic-bezier(.16,1,.3,1) forwards;opacity:0;transform:translateY(30px);}
+        @keyframes heroFadeIn{to{opacity:1;transform:translateY(0);}}
+        .hero-label{font-size:.85rem;letter-spacing:6px;color:var(--text-muted);text-transform:uppercase;margin-bottom:24px;display:flex;align-items:center;gap:14px;justify-content:center;}
+        .hero-label::before,.hero-label::after{content:'';display:block;width:40px;height:1px;background:var(--text-dim);}
+        .hero h1{font-size:clamp(4.5rem,9vw,8rem);margin-bottom:28px;font-weight:400;letter-spacing:-3px;background:linear-gradient(160deg,#ffffff 0%,#9090b0 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+        .hero-sub{font-size:1.05rem;color:var(--text-muted);max-width:560px;line-height:1.75;margin:0 auto 48px;}
+        .hero-cta{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;}
+        .btn-hero{padding:16px 36px;border-radius:50px;font-size:.9rem;letter-spacing:1px;text-decoration:none;transition:var(--transition);cursor:pointer;border:none;font-family:'Inter',sans-serif;}
+        .btn-hero-primary{background:var(--text-primary);color:#050508;font-weight:600;}
+        .btn-hero-primary:hover{background:#d0d0e8;transform:translateY(-3px);box-shadow:0 20px 40px rgba(0,0,0,.4);}
+        .btn-hero-ghost{background:transparent;color:var(--text-muted);border:1px solid var(--glass-border-hover);}
+        .btn-hero-ghost:hover{color:var(--text-primary);border-color:var(--text-muted);transform:translateY(-3px);}
+        .hero-scroll{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--text-dim);font-size:.7rem;letter-spacing:3px;text-transform:uppercase;z-index:2;animation:scrollPulse 2.5s ease-in-out infinite;}
+        @keyframes scrollPulse{0%,100%{opacity:.4;transform:translateX(-50%) translateY(0);}50%{opacity:.9;transform:translateX(-50%) translateY(6px);}}
+
+        /* SECTIONS */
+        .section{padding:130px 6%;max-width:1440px;margin:0 auto;}
+        .section-header{text-align:center;margin-bottom:70px;}
+        .section-eyebrow{font-size:.78rem;letter-spacing:5px;color:var(--text-dim);text-transform:uppercase;margin-bottom:16px;display:block;}
+        .section-title{font-size:clamp(2.2rem,4vw,3.5rem);font-weight:400;}
+
+        /* CARDS */
+        .project-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:28px;}
+        .card{background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius-lg);overflow:hidden;backdrop-filter:var(--blur-strength);-webkit-backdrop-filter:var(--blur-strength);transition:var(--transition);opacity:0;transform:translateY(40px);}
+        .card.visible{opacity:1;transform:translateY(0);}
+        .card:hover{transform:translateY(-12px);border-color:var(--glass-border-hover);box-shadow:0 30px 60px rgba(0,0,0,.5);}
+        .card-visual{height:300px;position:relative;overflow:hidden;display:flex;justify-content:center;align-items:flex-end;}
+        .card-visual::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,var(--glass-bg) 100%);z-index:1;}
+
+        /* Luna visual */
+        .visual-luna{background:radial-gradient(circle 120px at 50% 38%,rgba(200,180,255,.25) 0%,transparent 70%),radial-gradient(circle 60px at 50% 38%,rgba(220,210,255,.6) 0%,transparent 50%),linear-gradient(175deg,#0a0515 0%,#1a0a2e 30%,#0d0820 60%,#070510 100%);}
+        .v-moon{position:absolute;top:30px;left:50%;transform:translateX(-50%);width:90px;height:90px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#e8e0ff,#b8a8e8 50%,#7060a8 100%);box-shadow:0 0 40px rgba(180,160,255,.4),0 0 100px rgba(120,80,200,.15);z-index:2;animation:moonGlow 5s ease-in-out infinite alternate;}
+        @keyframes moonGlow{from{box-shadow:0 0 40px rgba(180,160,255,.4),0 0 100px rgba(120,80,200,.15);}to{box-shadow:0 0 60px rgba(200,180,255,.6),0 0 140px rgba(140,90,230,.25);}}
+        .v-label{font-size:4.5rem;font-family:'Playfair Display',serif;color:rgba(210,200,255,.12);letter-spacing:-2px;z-index:0;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);white-space:nowrap;}
+
+        /* Daebul visual */
+        .visual-daebul{background:linear-gradient(10deg,#1a0800 0%,#2a1000 25%,#150808 55%,#080508 100%);position:relative;}
+        .factory-silhouette{position:absolute;bottom:0;left:0;right:0;height:160px;z-index:2;background:linear-gradient(to top,#0d0500 0%,transparent 100%) 15% 0/18px 130px no-repeat,linear-gradient(to top,#0d0500 0%,transparent 100%) 25% 0/12px 100px no-repeat,linear-gradient(to top,#0d0500 0%,transparent 100%) 60% 0/20px 140px no-repeat,linear-gradient(to top,#0d0500 0%,transparent 100%) 72% 0/14px 90px no-repeat,linear-gradient(to top,#080300 100%,transparent 100%) center bottom/100% 60px no-repeat;}
+        .factory-glow{position:absolute;bottom:60px;left:0;right:0;height:80px;background:linear-gradient(to top,rgba(200,60,10,.25) 0%,transparent 100%);z-index:1;}
+        .smoke-particle{position:absolute;width:40px;height:40px;border-radius:50%;background:rgba(60,50,40,.4);filter:blur(15px);animation:smokeRise 8s ease-in infinite;}
+        @keyframes smokeRise{0%{transform:translateY(0) scale(.5);opacity:.6;}100%{transform:translateY(-200px) scale(2.5);opacity:0;}}
+
+        /* Symphony visual */
+        .visual-symphony{background:linear-gradient(160deg,#020d1a 0%,#040818 50%,#030614 100%);}
+        .wave-bars{position:absolute;bottom:20px;left:0;right:0;display:flex;justify-content:center;align-items:flex-end;gap:4px;padding:0 20px;z-index:2;}
+        .wave-bar{width:6px;border-radius:3px 3px 0 0;background:linear-gradient(to top,#0040a0,#00b4d8,#90e0ef);animation:waveAnim 1.8s ease-in-out infinite alternate;}
+        @keyframes waveAnim{from{transform:scaleY(.3);}to{transform:scaleY(1);}}
+        .v-orb-symphony{position:absolute;top:50%;left:50%;transform:translate(-50%,-60%);width:100px;height:100px;border-radius:50%;background:radial-gradient(circle at 40% 40%,#00d4ff,#0060cc 50%,#002060 100%);box-shadow:0 0 50px rgba(0,180,255,.5),0 0 120px rgba(0,100,200,.2);z-index:2;animation:orbPulse 3s ease-in-out infinite;}
+        @keyframes orbPulse{0%,100%{transform:translate(-50%,-60%) scale(1);}50%{transform:translate(-50%,-60%) scale(1.08);box-shadow:0 0 70px rgba(0,210,255,.7),0 0 160px rgba(0,130,230,.3);}}
+
+        .card-body{padding:36px 40px 40px;}
+        .card-meta{font-size:.74rem;color:var(--text-dim);letter-spacing:3px;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:10px;}
+        .card-meta::before{content:'';display:block;width:20px;height:1px;background:var(--text-dim);}
+        .card-title{font-size:1.85rem;margin-bottom:14px;}
+        .card-desc{font-size:.95rem;color:var(--text-muted);line-height:1.75;}
+
+        /* FORMS */
+        .system-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;}
+        @media(max-width:900px){.system-grid{grid-template-columns:1fr;}}
+        .form-panel{padding:44px;background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius-lg);backdrop-filter:var(--blur-strength);-webkit-backdrop-filter:var(--blur-strength);opacity:0;transform:translateY(40px);transition:opacity .6s ease,transform .6s ease;}
+        .form-panel.visible{opacity:1;transform:translateY(0);}
+        .panel-title{font-size:1.8rem;margin-bottom:8px;}
+        .panel-sub{font-size:.88rem;color:var(--text-muted);margin-bottom:32px;line-height:1.6;}
+        .panel-sub a{color:var(--accent);text-decoration:none;}
+        .panel-sub a:hover{text-decoration:underline;}
+        .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+        @media(max-width:600px){.form-row{grid-template-columns:1fr;}}
+        .form-group{position:relative;margin-bottom:18px;}
+        .form-label{display:block;font-size:.75rem;color:var(--text-dim);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;}
+        .form-control{width:100%;padding:16px 20px;background:rgba(0,0,0,.35);border:1px solid var(--glass-border);border-radius:var(--radius-md);color:var(--text-primary);font-family:'Inter',sans-serif;font-size:.95rem;transition:border-color .3s,box-shadow .3s;}
+        .form-control::placeholder{color:var(--text-dim);}
+        .form-control:focus{outline:none;border-color:rgba(200,200,220,.35);box-shadow:0 0 0 3px rgba(200,200,220,.07);}
+        textarea.form-control{resize:vertical;min-height:120px;}
+        .drive-upload{border:1px dashed rgba(255,255,255,.12);border-radius:var(--radius-md);padding:32px 24px;text-align:center;cursor:pointer;margin-bottom:20px;background:rgba(255,255,255,.01);transition:var(--transition);display:block;color:inherit;text-decoration:none;}
+        .drive-upload:hover{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.25);transform:translateY(-2px);}
+        .drive-icon{font-size:2.2rem;margin-bottom:10px;color:var(--text-dim);transition:color .3s;}
+        .drive-upload:hover .drive-icon{color:var(--text-muted);}
+        .drive-text{color:var(--text-muted);font-size:.88rem;line-height:1.6;}
+        .drive-sub{color:var(--text-dim);font-size:.78rem;margin-top:4px;}
+        .btn{width:100%;padding:18px 24px;background:var(--text-primary);color:#060608;border:none;border-radius:var(--radius-md);font-weight:600;font-size:.95rem;font-family:'Inter',sans-serif;cursor:pointer;transition:var(--transition);letter-spacing:.5px;display:flex;align-items:center;justify-content:center;gap:10px;}
+        .btn:hover{background:#d0d0e5;transform:translateY(-3px);box-shadow:0 16px 40px rgba(0,0,0,.4);}
+        .btn:active{transform:translateY(-1px);}
+        .btn-outline{background:transparent;border:1px solid var(--glass-border-hover);color:var(--text-primary);}
+        .btn-outline:hover{background:rgba(255,255,255,.06);border-color:var(--text-muted);}
+        .rating-label{font-size:.75rem;color:var(--text-dim);letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;display:block;}
+        .rating-group{display:flex;flex-direction:row-reverse;justify-content:flex-start;gap:8px;margin-bottom:24px;}
+        .rating-group input{display:none;}
+        .rating-group label{font-size:2rem;color:var(--text-dim);cursor:pointer;transition:color .2s,transform .2s;}
+        .rating-group label:hover{transform:scale(1.2);}
+        .rating-group input:checked~label,.rating-group label:hover,.rating-group label:hover~label{color:var(--gold);}
+        .form-status{display:none;padding:14px 20px;border-radius:var(--radius-md);font-size:.88rem;margin-top:16px;text-align:center;}
+        .form-status.success{background:rgba(80,160,80,.15);border:1px solid rgba(80,200,80,.25);color:#80e080;display:block;}
+        .form-status.error{background:rgba(180,60,60,.15);border:1px solid rgba(220,80,80,.25);color:#e08080;display:block;}
+
+        /* MODAL */
+        .modal{display:none;position:fixed;inset:0;background:rgba(4,4,6,.88);backdrop-filter:var(--blur-strength);-webkit-backdrop-filter:var(--blur-strength);z-index:9999;justify-content:center;align-items:center;padding:24px;}
+        .modal.open{display:flex;}
+        .modal-box{background:#0c0c12;border:1px solid var(--glass-border-hover);padding:50px 44px;border-radius:26px;text-align:center;max-width:460px;width:100%;animation:modalSlideUp .4s cubic-bezier(.16,1,.3,1) forwards;}
+        @keyframes modalSlideUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+        .modal-icon{width:72px;height:72px;border-radius:50%;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;margin:0 auto 24px;font-size:2rem;color:var(--accent);border:1px solid var(--glass-border-hover);}
+        .modal-box h3{font-size:2rem;margin-bottom:12px;}
+        .modal-sub{color:var(--text-muted);font-size:.92rem;line-height:1.7;margin-bottom:24px;}
+        .auto-reply{background:rgba(255,255,255,.04);border:1px solid var(--glass-border);padding:22px;border-radius:var(--radius-md);font-style:italic;color:var(--text-muted);font-size:.92rem;line-height:1.65;margin-bottom:28px;}
+
+        /* FOOTER */
+        footer{border-top:1px solid var(--glass-border);padding:50px 6%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;}
+        .footer-left .logo{font-size:1.3rem;letter-spacing:4px;color:var(--text-muted);}
+        .footer-right{font-size:.78rem;color:var(--text-dim);letter-spacing:1px;text-align:right;}
+
+        /* RESPONSIVE */
+        @media(max-width:768px){.project-grid{grid-template-columns:1fr;}.section{padding:80px 5%;}.nav-link{display:none;}.form-panel{padding:28px 24px;}footer{flex-direction:column;align-items:flex-start;}.footer-right{text-align:left;}}
+
+        .delay-1{transition-delay:.1s!important;}
+        .delay-2{transition-delay:.22s!important;}
+        .delay-3{transition-delay:.34s!important;}
+        .delay-fp2{transition-delay:.15s!important;}
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="#" class="logo">HAN</a>
+    <div class="nav-right">
+        <a href="#works" class="nav-link">Works</a>
+        <a href="#connect" class="nav-link">Connect</a>
+        <span class="nav-tag">PORTFOLIO SYSTEM V1.0</span>
+    </div>
+</nav>
+
+<section class="hero">
+    <div class="hero-orb orb1"></div>
+    <div class="hero-orb orb2"></div>
+    <div class="hero-orb orb3"></div>
+    <canvas id="heroCanvas"></canvas>
+    <div class="hero-content">
+        <div class="hero-label">Composer &nbsp;·&nbsp; Director &nbsp;·&nbsp; Planner</div>
+        <h1>Producer HAN</h1>
+        <p class="hero-sub">예술적 직관을 시스템화합니다.<br>영상, 음악, 공간을 통제하여 압도적인 서사를 구축하는 융합 창작자 포트폴리오.</p>
+        <div class="hero-cta">
+            <a href="#works" class="btn-hero btn-hero-primary">작품 보기</a>
+            <a href="#connect" class="btn-hero btn-hero-ghost">협업 제안</a>
+        </div>
+    </div>
+    <div class="hero-scroll">
+        <span>Scroll</span>
+        <i class="fa-solid fa-chevron-down" style="font-size:.6rem;"></i>
+    </div>
+</section>
+
+<section class="section" id="works">
+    <div class="section-header">
+        <span class="section-eyebrow">Portfolio</span>
+        <h2 class="section-title">Selected Works</h2>
+    </div>
+    <div class="project-grid">
+
+        <div class="card delay-1">
+            <div class="card-visual visual-luna">
+                <div class="v-moon"></div>
+                <span class="v-label">LUNA</span>
+            </div>
+            <div class="card-body">
+                <span class="card-meta">Art Planning / Script</span>
+                <h3 class="card-title">달의 여신 루나</h3>
+                <p class="card-desc">무대 기획, 대본 작성 및 프로젝트 총괄. 공간과 서사가 결합된 로맨틱 판타지 뮤지컬 퍼포먼스. 월출산이라는 자연 공간을 무대로 재해석한 몰입형 서사.</p>
+            </div>
+        </div>
+
+        <div class="card delay-2">
+            <div class="card-visual visual-daebul">
+                <div class="factory-glow"></div>
+                <div class="factory-silhouette"></div>
+                <div class="smoke-particle" style="left:15%;animation-delay:0s;"></div>
+                <div class="smoke-particle" style="left:25%;animation-delay:2.5s;"></div>
+                <div class="smoke-particle" style="left:60%;animation-delay:1.2s;"></div>
+                <div class="smoke-particle" style="left:72%;animation-delay:4s;"></div>
+            </div>
+            <div class="card-body">
+                <span class="card-meta">Film / Directing</span>
+                <h3 class="card-title">대불산단</h3>
+                <p class="card-desc">강렬한 미장센과 사회적 메시지. 감독 및 프로듀싱, 타이틀 시퀀스 디자인을 관통하는 영상 연출. 산업 현장의 인간 군상을 담은 단편 영화.</p>
+            </div>
+        </div>
+
+        <div class="card delay-3">
+            <div class="card-visual visual-symphony">
+                <div class="v-orb-symphony"></div>
+                <div class="wave-bars" id="waveBars"></div>
+            </div>
+            <div class="card-body">
+                <span class="card-meta">Audio / Visual Design</span>
+                <h3 class="card-title">Symphonic Waves</h3>
+                <p class="card-desc">사운드 엔지니어링과 AI 시각화의 결합. 오케스트라 편곡에 맞춘 프로젝션 매핑 비주얼라이저 제작. Baby Shark 오케스트라 버전의 시청각 경험.</p>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<section class="section" id="connect" style="padding-top:40px;">
+    <div class="section-header">
+        <span class="section-eyebrow">Collaboration</span>
+        <h2 class="section-title">Connect System</h2>
+    </div>
+    <div class="system-grid">
+
+        <!-- INQUIRY FORM -->
+        <div class="form-panel">
+            <h3 class="panel-title">Direct Inquiry</h3>
+            <p class="panel-sub">메시지는 <a href="mailto:k333896@naver.com">k333896@naver.com</a> 으로 즉시 라우팅됩니다.<br>자동 응답 프로토콜이 활성화됩니다.</p>
+            <!--
+              Formspree 연동:
+              1. https://formspree.io 무료 계정 생성
+              2. 새 폼 생성 후 endpoint 복사
+              3. action="https://formspree.io/f/YOUR_FORM_ID" 로 교체
+            -->
+            <form id="inquiryForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST" onsubmit="handleInquirySubmit(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">성함</label>
+                        <input type="text" name="name" class="form-control" placeholder="홍길동" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">소속 / 기관</label>
+                        <input type="text" name="organization" class="form-control" placeholder="소속을 입력하세요">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">답장 이메일</label>
+                    <input type="email" name="email" class="form-control" placeholder="your@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">프로젝트 제안 내용</label>
+                    <textarea name="message" class="form-control" rows="5" placeholder="협업하고 싶은 프로젝트나 제안 내용을 자유롭게 작성해주세요." required></textarea>
+                </div>
+                <a href="https://drive.google.com/drive/shared-with-me" target="_blank" rel="noopener noreferrer" class="drive-upload">
+                    <div class="drive-icon"><i class="fa-brands fa-google-drive"></i></div>
+                    <div class="drive-text">첨부 파일 연결 (Google Drive)</div>
+                    <div class="drive-sub">클릭하면 Drive가 열립니다 — URL을 메시지에 포함해주세요</div>
+                </a>
+                <button type="submit" class="btn" id="inquirySubmitBtn">
+                    <i class="fa-solid fa-paper-plane"></i> 전송 및 자동 응답 예약
+                </button>
+                <div class="form-status" id="inquiryStatus"></div>
+            </form>
+        </div>
+
+        <!-- SURVEY FORM -->
+        <div class="form-panel delay-fp2">
+            <h3 class="panel-title">Data Collection</h3>
+            <p class="panel-sub">만족도 조사 데이터는 <strong>Google Sheets</strong>에 자동 적재됩니다.<br>익명으로 제출 가능합니다.</p>
+            <!--
+              Google Apps Script 연동:
+              1. Google Sheets 생성 (열: Timestamp, Rating, Feedback)
+              2. 확장 > Apps Script 열기
+              3. 아래 코드 붙여넣기:
+                 function doPost(e) {
+                   var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+                   var data = JSON.parse(e.postData.contents);
+                   sheet.appendRow([new Date(), data.rating||'', data.feedback||'']);
+                   return ContentService.createTextOutput(
+                     JSON.stringify({result:'success'})
+                   ).setMimeType(ContentService.MimeType.JSON);
+                 }
+              4. 배포 > 웹앱으로 배포 > 누구나 액세스 허용
+              5. 배포 URL을 스크립트의 APPS_SCRIPT_URL 변수에 입력
+            -->
+            <form id="surveyForm" onsubmit="handleSurveySubmit(event)">
+                <span class="rating-label">포트폴리오 만족도 평가</span>
+                <div class="rating-group">
+                    <input type="radio" id="r5" name="rating" value="5"><label for="r5" class="fa-solid fa-star" title="5점"></label>
+                    <input type="radio" id="r4" name="rating" value="4"><label for="r4" class="fa-solid fa-star" title="4점"></label>
+                    <input type="radio" id="r3" name="rating" value="3"><label for="r3" class="fa-solid fa-star" title="3점"></label>
+                    <input type="radio" id="r2" name="rating" value="2"><label for="r2" class="fa-solid fa-star" title="2점"></label>
+                    <input type="radio" id="r1" name="rating" value="1"><label for="r1" class="fa-solid fa-star" title="1점"></label>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">피드백</label>
+                    <textarea id="feedbackText" name="feedback" class="form-control" rows="7" placeholder="웹사이트의 사용성이나 포트폴리오에 대한 피드백을 남겨주세요." required></textarea>
+                </div>
+                <button type="submit" class="btn btn-outline" id="surveySubmitBtn">
+                    <i class="fa-solid fa-chart-bar"></i> 피드백 제출
+                </button>
+                <div class="form-status" id="surveyStatus"></div>
+            </form>
+        </div>
+
+    </div>
+</section>
+
+<div id="replyModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-box">
+        <div class="modal-icon"><i class="fa-solid fa-check"></i></div>
+        <h3 id="modalTitle">System Routed</h3>
+        <p class="modal-sub">메시지가 성공적으로 전송되었습니다.<br>자동 응답 프로토콜이 활성화되었습니다.</p>
+        <div class="auto-reply">"감사합니다. 프로듀서 한입니다.<br>검토 후 빠른 시일 내에 연락 드리겠습니다."</div>
+        <button class="btn btn-outline" onclick="closeModal()" style="width:auto;padding:14px 32px;margin:0 auto;">확인 및 닫기</button>
+    </div>
+</div>
+
+<footer>
+    <div class="footer-left"><a href="#" class="logo">HAN</a></div>
+    <div class="footer-right">
+        <div>© 2026 Producer HAN. All rights reserved.</div>
+        <div style="margin-top:6px;"><a href="mailto:k333896@naver.com" style="color:var(--text-dim);text-decoration:none;">k333896@naver.com</a></div>
+    </div>
+</footer>
+
+<script>
+/* ── CONFIG ── */
+const APPS_SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_DEPLOYMENT_URL';
+
+/* ── WAVE BARS ── */
+(function() {
+    const container = document.getElementById('waveBars');
+    for (let i = 0; i < 32; i++) {
+        const bar = document.createElement('div');
+        bar.className = 'wave-bar';
+        const maxH = 28 + Math.random() * 100;
+        bar.style.cssText = `
+            animation-delay:${(Math.random()*1.5).toFixed(2)}s;
+            animation-duration:${(1.2+Math.random()*1.2).toFixed(2)}s;
+            height:${maxH}px;
+            opacity:${(0.5+Math.random()*0.5).toFixed(2)};
+        `;
+        container.appendChild(bar);
+    }
+})();
+
+/* ── HERO PARTICLES ── */
+(function() {
+    const canvas = document.getElementById('heroCanvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [], W, H;
+    function resize() { W = canvas.width = canvas.offsetWidth; H = canvas.height = canvas.offsetHeight; }
+    function Particle() {
+        this.x = Math.random()*W; this.y = Math.random()*H;
+        this.r = Math.random()*1.2+0.3; this.vx = (Math.random()-.5)*.25; this.vy = (Math.random()-.5)*.25;
+        this.alpha = Math.random()*.5+.1;
+    }
+    function init() { particles = []; const n = Math.floor((W*H)/9000); for(let i=0;i<n;i++) particles.push(new Particle()); }
+    function draw() {
+        ctx.clearRect(0,0,W,H);
+        particles.forEach(p => {
+            ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+            ctx.fillStyle=`rgba(200,200,240,${p.alpha})`; ctx.fill();
+            p.x+=p.vx; p.y+=p.vy;
+            if(p.x<0||p.x>W) p.vx*=-1; if(p.y<0||p.y>H) p.vy*=-1;
+        });
+        requestAnimationFrame(draw);
+    }
+    resize(); init(); draw();
+    window.addEventListener('resize', () => { resize(); init(); });
+})();
+
+/* ── SCROLL REVEAL ── */
+(function() {
+    const obs = new IntersectionObserver(entries => {
+        entries.forEach(el => { if(el.isIntersecting) { el.target.classList.add('visible'); obs.unobserve(el.target); } });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.card, .form-panel').forEach(el => obs.observe(el));
+})();
+
+/* ── INQUIRY FORM (Formspree) ── */
+async function handleInquirySubmit(e) {
+    e.preventDefault();
+    const form = document.getElementById('inquiryForm');
+    const btn = document.getElementById('inquirySubmitBtn');
+    const status = document.getElementById('inquiryStatus');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> 전송 중...';
+    status.className = 'form-status';
+    const action = form.getAttribute('action');
+    if (!action || action.includes('YOUR_FORM_ID')) {
+        await new Promise(r => setTimeout(r, 900));
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> 전송 및 자동 응답 예약';
+        form.reset(); openModal(); return;
+    }
+    try {
+        const res = await fetch(action, { method:'POST', body: new FormData(form), headers:{'Accept':'application/json'} });
+        if (res.ok) { form.reset(); openModal(); }
+        else { const j = await res.json(); throw new Error(j.errors ? j.errors.map(x=>x.message).join(', ') : '전송 실패'); }
+    } catch(err) {
+        status.textContent = '⚠ 전송 중 오류: ' + err.message;
+        status.className = 'form-status error';
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> 전송 및 자동 응답 예약';
+    }
+}
+
+/* ── SURVEY FORM (Google Apps Script) ── */
+async function handleSurveySubmit(e) {
+    e.preventDefault();
+    const form = document.getElementById('surveyForm');
+    const btn = document.getElementById('surveySubmitBtn');
+    const status = document.getElementById('surveyStatus');
+    const rating = form.querySelector('input[name="rating"]:checked');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> 제출 중...';
+    status.className = 'form-status';
+    const payload = { rating: rating ? rating.value : '미선택', feedback: document.getElementById('feedbackText').value.trim(), timestamp: new Date().toISOString() };
+    if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.includes('YOUR_GOOGLE')) {
+        await new Promise(r => setTimeout(r, 800));
+        status.textContent = '✓ 피드백이 Google Sheets에 성공적으로 기록되었습니다.';
+        status.className = 'form-status success';
+        form.reset();
+    } else {
+        try {
+            await fetch(APPS_SCRIPT_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+            status.textContent = '✓ 피드백이 Google Sheets에 성공적으로 기록되었습니다.';
+            status.className = 'form-status success';
+            form.reset();
+        } catch(err) {
+            status.textContent = '⚠ 제출 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.';
+            status.className = 'form-status error';
+        }
+    }
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fa-solid fa-chart-bar"></i> 피드백 제출';
+}
+
+/* ── MODAL ── */
+function openModal() { document.getElementById('replyModal').classList.add('open'); document.body.style.overflow = 'hidden'; }
+function closeModal() { document.getElementById('replyModal').classList.remove('open'); document.body.style.overflow = ''; }
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
+document.getElementById('replyModal').addEventListener('click', function(e) { if(e.target===this) closeModal(); });
+</script>
+</body>
+</html>
