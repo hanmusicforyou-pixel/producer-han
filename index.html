@@ -142,6 +142,12 @@
         .form-status.success{background:rgba(80,160,80,.15);border:1px solid rgba(80,200,80,.25);color:#80e080;display:block;}
         .form-status.error{background:rgba(180,60,60,.15);border:1px solid rgba(220,80,80,.25);color:#e08080;display:block;}
 
+        /* DOWNLOAD */
+        .download-panel{max-width:720px;margin:0 auto;text-align:center;}
+        .download-icon{font-size:2.4rem;color:var(--text-muted);margin-bottom:14px;}
+        .download-meta{font-size:.78rem;color:var(--text-dim);letter-spacing:1px;margin-bottom:18px;}
+        .download-btn{text-decoration:none;max-width:360px;margin:0 auto;}
+
         /* MODAL */
         .modal{display:none;position:fixed;inset:0;background:rgba(4,4,6,.88);backdrop-filter:var(--blur-strength);-webkit-backdrop-filter:var(--blur-strength);z-index:9999;justify-content:center;align-items:center;padding:24px;}
         .modal.open{display:flex;}
@@ -172,6 +178,7 @@
     <a href="#" class="logo">HAN</a>
     <div class="nav-right">
         <a href="#works" class="nav-link">Works</a>
+        <a href="#download" class="nav-link">Download</a>
         <a href="#connect" class="nav-link">Connect</a>
         <span class="nav-tag">PORTFOLIO SYSTEM V1.0</span>
     </div>
@@ -244,6 +251,21 @@
             </div>
         </div>
 
+    </div>
+</section>
+
+<section class="section" id="download" style="padding-top:40px;">
+    <div class="section-header">
+        <span class="section-eyebrow">Plugin</span>
+        <h2 class="section-title">Ember Drive</h2>
+    </div>
+    <div class="form-panel download-panel">
+        <div class="download-icon"><i class="fa-brands fa-google-drive" aria-hidden="true"></i></div>
+        <p class="download-meta">v1.1.4 beta.1 · 설치 파일(ZIP) · 약 400KB</p>
+        <p class="panel-sub">Ember Drive 플러그인 설치 파일을 Google Drive에서 내려받을 수 있습니다.<br>버튼을 누르면 Google Drive 페이지가 새 탭에서 열립니다.</p>
+        <a href="https://drive.google.com/file/d/1_F0rPsneIq_YK1qRJD-qZ3GU4BL-w5Xx/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn download-btn">
+            <i class="fa-solid fa-download" aria-hidden="true"></i> Ember Drive 플러그인 다운로드
+        </a>
     </div>
 </section>
 
