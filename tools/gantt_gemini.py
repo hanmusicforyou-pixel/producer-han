@@ -21,7 +21,7 @@ import os, json, sys, argparse, getpass, urllib.request, urllib.error
 DEFAULT_MODEL = "gemini-2.0-flash"  # 빠르고 무료 티어. 품질 우선이면 gemini-2.5-pro
 
 
-def resolve_key(cli_key: str | None) -> str:
+def resolve_key(cli_key):
     """키 우선순위: --key 인자 > 환경변수 > 터미널 입력(숨김)."""
     key = cli_key or os.environ.get("GEMINI_API_KEY")
     if not key and sys.stdin.isatty():
