@@ -10,7 +10,7 @@
     GEMINI_API_KEY=AIza... python3 tools/gantt_gemini.py   # 환경변수로 전달
 
 옵션:
-    --model gemini-2.5-pro    # 기본값 gemini-2.0-flash (빠름·무료). 품질 우선 시 pro
+    --model gemini-3.8-pro    # 기본값 gemini-3.8-flash (빠름). 품질 우선 시 pro 계열
     --raw                     # 보강 JSON 원문만 출력
 
 출력: tools/augmented_tasks.json  (팀별 작업 목록. s/e 는 D-day, 음수=공연 전)
@@ -18,7 +18,7 @@
 """
 import os, json, sys, argparse, getpass, urllib.request, urllib.error
 
-DEFAULT_MODEL = "gemini-2.0-flash"  # 빠르고 무료 티어. 품질 우선이면 gemini-2.5-pro
+DEFAULT_MODEL = "gemini-3.8-flash"  # 빠른 최신 flash. 다른 모델은 --model 로 지정
 
 
 def resolve_key(cli_key):
