@@ -1,0 +1,4 @@
+# 다운로드된 원본 파일은 커밋하지 않음 (용량·저작권)
+_attachments/*
+!_attachments/.gitkeep
+_download-log.txt
