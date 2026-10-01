@@ -33,9 +33,15 @@ SYSTEM_FOOTER = "----- system -----"
 
 
 def build_subject_regex(keyword: str) -> re.Pattern:
-    # "영암부부농원 발주서" → 영\s*암\s*부\s*부\s*농\s*원\s*발\s*주\s*서  (띄어쓰기 차이 허용)
+    """제목에서 'N월 N일 영암부부농원 발주서' 를 찾는 정규식.
+
+    허용 예: '10월 5일 영암부부농원 발주서', '10월5일 영암부부농원발주서', 'RE: 10월 05일 …',
+            '(10)월 (5)일 …', '[10월 5일] …'  (괄호·대괄호·앞의 RE:/FW: 는 무시)
+    키워드는 글자 사이 띄어쓰기 차이를 허용: 영\s*암\s*부\s*부\s*농\s*원\s*발\s*주\s*서
+    """
     chars = [re.escape(ch) for ch in keyword if not ch.isspace()]
-    return re.compile(r"(\d{1,2})\s*월\s*(\d{1,2})\s*일\s*" + r"\s*".join(chars))
+    num = r"[\(\[]?\s*(\d{1,2})\s*[\)\]]?\s*"
+    return re.compile(num + r"월\s*" + num + r"일\s*[\)\]]?\s*" + r"\s*".join(chars))
 
 
 @dataclass
@@ -156,6 +162,7 @@ class Pipeline:
             "date_short": T.date_short(target),
             "deadline_kor": T.time_kor(ct.hour, ct.minute),
             "end_date_kor": T.date_kor(self.cfg.end_date, weekday=False),
+            "next_example_subject": f"{T.date_short(target + timedelta(days=1))} {self.cfg.subject_keyword}",
         }
 
     @staticmethod
