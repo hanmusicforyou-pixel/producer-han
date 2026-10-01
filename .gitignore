@@ -1,0 +1,6 @@
+# 발주 자동화 런타임 데이터 (고객 개인정보 포함 - 절대 커밋 금지)
+order_automation/data/
+order_automation/.env
+__pycache__/
+*.pyc
+.DS_Store
