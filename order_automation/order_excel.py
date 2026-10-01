@@ -30,14 +30,14 @@ COL_WIDTHS = {"A": 10, "B": 10, "C": 46, "D": 14, "E": 12, "F": 8, "G": 10, "H":
 
 # 헤더 별칭 (공백 제거, 괄호 앞부분 기준으로 비교)
 ALIASES: dict[str, list[str]] = {
-    "받는분성함": ["받는분성함", "받는분이름", "받는분", "받는분명", "수령인", "수령인명", "수취인", "수취인명", "받는사람", "고객명", "주문자"],
+    "받는분성함": ["받는분성함", "받는분이름", "받는분", "받는분명", "수령인", "수령인명", "수취인", "수취인명", "받는사람", "고객명", "주문자", "수하인", "수하인명", "수하인이름"],
     "받는분우편번호": ["받는분우편번호", "우편번호", "수령인우편번호"],
-    "받는분주소(전체, 분할)": ["받는분주소", "주소", "수령인주소", "수취인주소", "배송주소", "배송지", "받는분주소전체"],
-    "받는분전화번호": ["받는분전화번호", "받는분연락처", "받는분휴대폰", "전화번호", "연락처", "휴대폰", "수령인전화번호", "수령인연락처", "수취인전화번호", "수취인연락처"],
+    "받는분주소(전체, 분할)": ["받는분주소", "주소", "수령인주소", "수취인주소", "배송주소", "배송지", "받는분주소전체", "수하인주소"],
+    "받는분전화번호": ["받는분전화번호", "받는분연락처", "받는분휴대폰", "전화번호", "연락처", "휴대폰", "수령인전화번호", "수령인연락처", "수취인전화번호", "수취인연락처", "수하인전화", "수하인전화번호", "수하인연락처"],
     "받는분기타연락처": ["받는분기타연락처", "기타연락처", "전화번호2", "연락처2", "받는분전화번호2"],
     "박스수량": ["박스수량", "수량", "박스", "개수", "갯수", "주문수량", "박스개수"],
     "배송메세지1": ["배송메세지1", "배송메세지", "배송메시지", "배송요청사항", "요청사항", "배송메모", "메세지", "메시지"],
-    "품목명": ["품목명", "상품명", "품목", "상품", "옵션", "상품옵션", "옵션명", "제품명"],
+    "품목명": ["품목명", "상품명", "품목", "상품", "옵션", "상품옵션", "옵션명", "제품명", "물품명", "물품"],
     "보내는분성명": ["보내는분성명", "보내는분", "보내는분이름", "발송인", "발송인명", "보내는사람", "업체명", "판매자", "판매자명"],
     "보내는분전화번호": ["보내는분전화번호", "보내는분연락처", "발송인전화번호", "발송인연락처", "업체전화번호"],
     "보내는분주소(전체, 분할)": ["보내는분주소", "발송인주소", "업체주소"],
@@ -104,6 +104,25 @@ def clean_postal(v: Any) -> str:
     if s.isdigit() and len(s) < 5:
         return s.zfill(5)
     return s
+
+
+_REGION = {
+    "서울특별시": "서울", "부산광역시": "부산", "대구광역시": "대구", "인천광역시": "인천", "광주광역시": "광주",
+    "대전광역시": "대전", "울산광역시": "울산", "세종특별자치시": "세종", "경기도": "경기", "강원도": "강원",
+    "강원특별자치도": "강원", "충청북도": "충북", "충청남도": "충남", "전라북도": "전북", "전북특별자치도": "전북",
+    "전라남도": "전남", "경상북도": "경북", "경상남도": "경남", "제주특별자치도": "제주", "전남광주통합특별시": "광주",
+}
+
+
+def addr_prefix(addr: str, tokens: int = 3) -> str:
+    """주소 앞부분(시도 시군구 읍면동/도로)만 정규화해 비교용으로 반환. '****' 가림과 시도 표기 차이를 흡수."""
+    parts = re.sub(r"[\*\(\)\[\],]", " ", clean_str(addr)).split()
+    parts = [_REGION.get(p, p) for p in parts]
+    return "".join(parts[:tokens])
+
+
+def _masked(v: Any) -> bool:
+    return "*" in clean_str(v)
 
 
 def clean_qty(v: Any) -> int:
@@ -179,29 +198,60 @@ class OrderRow:
         return out
 
     def match_keys(self) -> list[tuple]:
+        """엄격 → 느슨 순서의 매칭 키. 값이 비면(전화가 가려진 경우 등) 해당 단계는 건너뜀."""
         name = re.sub(r"\s+", "", clean_str(self["받는분성함"]))
-        phone = re.sub(r"\D", "", clean_str(self["받는분전화번호"]))
-        item = re.sub(r"\s+", "", clean_str(self["품목명"]))
-        addr = re.sub(r"\s+", "", clean_str(self["받는분주소(전체, 분할)"]))[:12]
-        return [(name, phone, item), (name, phone), (name, item), (name, addr)]
+        raw_phone = clean_str(self["받는분전화번호"])
+        phone = "" if _masked(raw_phone) else re.sub(r"\D", "", raw_phone)
+        item = re.sub(r"\s+", "", self.product)
+        a3 = addr_prefix(clean_str(self["받는분주소(전체, 분할)"]), 3)
+        a2 = addr_prefix(clean_str(self["받는분주소(전체, 분할)"]), 2)
+        return [(name, phone, item), (name, a3, item), (name, phone), (name, a3), (name, item), (name, a2), (name,)]
 
     def dedup_key(self) -> tuple:
         return tuple(clean_str(self.values.get(c)) for c in COLUMNS)
 
 
 # ── 읽기 ────────────────────────────────────────────────────────────────
+def _row_mapping(cells: list[Any]) -> dict[int, str]:
+    mapping: dict[int, str] = {}
+    for ci, v in enumerate(cells):
+        canon = canonical_header(v)
+        if canon and canon not in mapping.values():
+            mapping[ci] = canon
+    return mapping
+
+
+def _combine_header_rows(top: list[Any], bottom: list[Any]) -> list[str]:
+    """두 줄 헤더를 한 줄로 합침. 병합 셀(윗줄이 비어 있음)은 왼쪽 값을 이어받음.
+    예) 윗줄 [운송장번호, 수하인, -, -] + 아랫줄 [-, 이름, 주소, 전화] → [운송장번호, 수하인이름, 수하인주소, 수하인전화]
+    """
+    n = max(len(top), len(bottom))
+    out: list[str] = []
+    last_top = ""
+    for ci in range(n):
+        t = clean_str(top[ci]) if ci < len(top) else ""
+        b = clean_str(bottom[ci]) if ci < len(bottom) else ""
+        if t:
+            last_top = t
+        elif not b:
+            last_top = ""  # 아랫줄도 비어 있으면 병합 구간 끝
+        out.append(f"{t or (last_top if b else '')}{b}")
+    return out
+
+
 def _detect_header(rows: list[list[Any]]) -> tuple[int, dict[int, str]] | None:
-    best = None
-    for idx, row in enumerate(rows[:20]):
-        mapping: dict[int, str] = {}
-        for ci, v in enumerate(row):
-            canon = canonical_header(v)
-            if canon and canon not in mapping.values():
-                mapping[ci] = canon
-        found = set(mapping.values())
-        if len(found) >= 3 and REQUIRED_FOR_HEADER <= found:
-            if best is None or len(mapping) > len(best[1]):
-                best = (idx, mapping)
+    """(데이터 시작 행 인덱스, {열번호: 표준 헤더}) 반환. 한 줄 헤더와 두 줄 헤더를 모두 시도해 더 많이 인식된 쪽 선택."""
+    best: tuple[int, dict[int, str]] | None = None
+    limit = min(20, len(rows))
+    for idx in range(limit):
+        candidates = [(idx + 1, _row_mapping(rows[idx]))]
+        if idx + 1 < len(rows):
+            candidates.append((idx + 2, _row_mapping(_combine_header_rows(rows[idx], rows[idx + 1]))))
+        for start, mapping in candidates:
+            found = set(mapping.values())
+            if len(found) >= 3 and REQUIRED_FOR_HEADER <= found:
+                if best is None or len(mapping) > len(best[1]):
+                    best = (start, mapping)
     return best
 
 
@@ -210,9 +260,9 @@ def _rows_to_orders(rows: list[list[Any]], filename: str, sheet: str) -> list[Or
     if not detected:
         log.debug("발주 헤더 없는 시트 건너뜀: %s [%s]", filename, sheet)
         return []
-    hidx, mapping = detected
+    start, mapping = detected
     out: list[OrderRow] = []
-    for rno, row in enumerate(rows[hidx + 1:], start=hidx + 2):
+    for rno, row in enumerate(rows[start:], start=start + 1):
         vals: dict[str, Any] = {c: "" for c in COLUMNS}
         for ci, canon in mapping.items():
             if ci < len(row):
@@ -329,8 +379,10 @@ def dedup_rows(rows: list[OrderRow]) -> tuple[list[OrderRow], int]:
 
 # ── 회신 매칭 ───────────────────────────────────────────────────────────
 def match_reply_rows(original: list[OrderRow], reply: list[OrderRow]) -> tuple[int, list[OrderRow]]:
-    """박경원님 회신 엑셀의 행을 원본 발주 행에 매칭해 운송장번호(및 비어있던 값)를 채움.
+    """회신 엑셀의 행을 원본 발주 행에 매칭해 운송장번호(및 비어있던 값)를 채움.
 
+    엄격한 키(이름+전화+품목)부터 느슨한 키(이름+주소앞부분, 이름만)까지 차례로 시도합니다.
+    같은 키에 후보가 둘 이상(동명이인 등)이면 그 단계에서는 맞추지 않고 다음 단계로 넘깁니다.
     반환: (매칭 건수, 매칭 안 된 회신 행 목록)
     """
     if not reply:
@@ -338,7 +390,8 @@ def match_reply_rows(original: list[OrderRow], reply: list[OrderRow]) -> tuple[i
     unmatched_reply: list[OrderRow] = list(reply)
     matched = 0
     used_original: set[int] = set()
-    for level in range(4):  # (이름,전화,품목) → (이름,전화) → (이름,품목) → (이름,주소앞부분)
+    n_levels = len(original[0].match_keys()) if original else 0
+    for level in range(n_levels):
         index: dict[tuple, list[int]] = defaultdict(list)
         for i, o in enumerate(original):
             if i in used_original:
@@ -346,11 +399,18 @@ def match_reply_rows(original: list[OrderRow], reply: list[OrderRow]) -> tuple[i
             k = o.match_keys()[level]
             if all(k):
                 index[k].append(i)
+        reply_count: Counter = Counter()
+        for rr in unmatched_reply:
+            k = rr.match_keys()[level]
+            if all(k):
+                reply_count[k] += 1
         still: list[OrderRow] = []
         for rr in unmatched_reply:
             k = rr.match_keys()[level]
-            if all(k) and index.get(k):
-                oi = index[k].pop(0)
+            cands = index.get(k, []) if all(k) else []
+            # 후보가 1개이고 회신 쪽도 그 키가 1개일 때(유일 매칭)만 확정. 엄격한 처음 3단계는 순서대로 소진 허용.
+            if cands and (level < 3 or (len(cands) == 1 and reply_count[k] == 1)):
+                oi = cands.pop(0)
                 _apply_reply(original[oi], rr)
                 used_original.add(oi)
                 matched += 1
@@ -359,7 +419,7 @@ def match_reply_rows(original: list[OrderRow], reply: list[OrderRow]) -> tuple[i
         unmatched_reply = still
         if not unmatched_reply:
             break
-    # 마지막 수단: 건수가 같고 남은 게 있으면 순서대로
+    # 마지막 수단: 남은 건수가 같으면 순서대로
     remaining_orig = [i for i in range(len(original)) if i not in used_original]
     if unmatched_reply and len(remaining_orig) == len(unmatched_reply):
         for oi, rr in zip(remaining_orig, unmatched_reply):
@@ -373,7 +433,7 @@ def _apply_reply(o: OrderRow, r: OrderRow) -> None:
     for col in ("운송장번호", "받는분주소(전체, 분할)", "받는분전화번호", "받는분우편번호", "박스수량", "배송메세지1"):
         new = clean_str(r.values.get(col))
         old = clean_str(o.values.get(col))
-        if not new or new == old:
+        if not new or new == old or _masked(new):
             continue
         if col == "운송장번호" or not old or col == "박스수량":
             o.changed[col] = (old, new)
