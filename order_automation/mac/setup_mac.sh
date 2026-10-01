@@ -44,7 +44,7 @@ ask() {  # ask KEY "질문" [기본값]
 ask MY_NAME  "안내문 서명에 쓸 내 이름"
 ask MY_PHONE "안내문 서명에 쓸 내 연락처 (예 010-1234-5678)"
 ask NAVER_ID "네이버 아이디" "k333896"
-printf '네이버 비밀번호 (화면에 표시되지 않음. 2단계 인증 사용 시 애플리케이션 비밀번호): '
+printf '네이버 '애플리케이션 비밀번호' (평소 비밀번호 아님, 화면에 표시되지 않음): '
 read -r -s NAVER_PW; echo
 [ -n "$NAVER_PW" ] || fail "비밀번호가 비어 있습니다. 다시 실행해 주세요."
 ENV_VALUE="$NAVER_PW" .venv/bin/python mac/set_env.py NAVER_APP_PASSWORD
@@ -61,8 +61,10 @@ else
 
 ✖ 로그인에 실패했습니다. 아래 순서로 확인한 뒤 'bash mac/setup_mac.sh' 를 다시 실행하세요.
   1) 네이버 메일 > 환경설정 > POP3/IMAP 설정 > IMAP/SMTP 설정 탭 > '사용함' 저장
-  2) 2단계 인증을 쓰면 일반 비밀번호는 거부됩니다 → 네이버 보안설정에서 '애플리케이션 비밀번호' 발급
+  2) 평소 비밀번호는 거부됩니다. 네이버 보안설정에서 2단계 인증을 '켜고' → 애플리케이션 비밀번호를 새로 발급해 입력하세요
+     (2단계 인증이 꺼져 있으면 앱 비밀번호를 만들 수 없습니다)
   3) 오류 문구가 'check your username, password' 면 비밀번호 문제, 'IMAP/SMTP settings' 면 1번 문제
+  4) 'CERTIFICATE_VERIFY_FAILED' 면 '응용 프로그램 > Python 3.x > Install Certificates.command' 를 한 번 실행
 MSG
   exit 1
 fi

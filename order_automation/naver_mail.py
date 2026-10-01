@@ -12,6 +12,7 @@ import imaplib
 import logging
 import re
 import smtplib
+import ssl
 from dataclasses import dataclass, field
 from datetime import date, datetime, timezone
 from email import policy
@@ -39,6 +40,18 @@ _UID_RE = re.compile(rb"UID (\d+)")
 
 XLSX_MIME = "vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 SPREADSHEET_EXT = (".xlsx", ".xlsm", ".xls", ".csv")
+
+
+def ssl_context() -> ssl.SSLContext:
+    """기본 인증서에 certifi 인증서를 더해 로드. Mac 의 python.org 파이썬처럼 시스템 인증서가 비어 있어도 접속되게 함."""
+    ctx = ssl.create_default_context()
+    try:
+        import certifi  # type: ignore
+
+        ctx.load_verify_locations(cafile=certifi.where())
+    except Exception:  # noqa: BLE001
+        pass
+    return ctx
 
 
 def imap_date(d: date) -> str:
@@ -114,7 +127,7 @@ class NaverMail:
 
     # ── IMAP ────────────────────────────────────────────────────────────
     def connect(self) -> "NaverMail":
-        self.imap = imaplib.IMAP4_SSL(self.IMAP_HOST, self.IMAP_PORT)
+        self.imap = imaplib.IMAP4_SSL(self.IMAP_HOST, self.IMAP_PORT, ssl_context=ssl_context())
         try:
             self.imap.login(self.login_id, self.password)
         except imaplib.IMAP4.error:
@@ -277,7 +290,7 @@ class NaverMail:
             log.info("[DRY-RUN] 발송 생략 → %s | %s", result.to, subject)
             return result
 
-        with smtplib.SMTP_SSL(self.SMTP_HOST, self.SMTP_PORT, timeout=60) as smtp:
+        with smtplib.SMTP_SSL(self.SMTP_HOST, self.SMTP_PORT, timeout=60, context=ssl_context()) as smtp:
             try:
                 smtp.login(self.login_id, self.password)
             except smtplib.SMTPAuthenticationError:

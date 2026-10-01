@@ -127,7 +127,8 @@ def cmd_test_login(cfg, args):
         print(f"IMAP OK - 최근 2일 받은메일 {len(hdrs)}건")
         for h in hdrs[-5:]:
             print("  ", h.short())
-    with smtplib.SMTP_SSL(mail.SMTP_HOST, mail.SMTP_PORT, timeout=30) as smtp:
+    from naver_mail import ssl_context
+    with smtplib.SMTP_SSL(mail.SMTP_HOST, mail.SMTP_PORT, timeout=30, context=ssl_context()) as smtp:
         try:
             smtp.login(mail.login_id, mail.password)
         except smtplib.SMTPAuthenticationError:
