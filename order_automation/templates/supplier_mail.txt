@@ -1,0 +1,18 @@
+{supplier_name} 님, 안녕하세요. {my_name}입니다.
+
+{date_kor} 영암부부농원 발주서(통합) 보내드립니다.
+
+■ 발주 요약 : 업체 {vendor_count}곳 / 총 {row_count}건 / {box_total}박스
+{product_table}
+{missing_note}
+■ 첨부 : {attachment_name}
+   - [통합발주서] 시트 : 발송 건 전체 (받는분 정보 / 품목명 / 박스수량 / 보내는분 정보)
+   - [품목요약] 시트 : 품목별 건수·수량·환산중량
+
+발송 후 첨부 엑셀의 '운송장번호' 열을 채워서 이 메일에 회신해 주시면,
+업체별로 정리해서 바로 전달하겠습니다.
+
+감사합니다.
+
+{my_name}
+{my_phone}

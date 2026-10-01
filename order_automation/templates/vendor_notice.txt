@@ -1,0 +1,25 @@
+{vendor_name} 담당자님, 안녕하세요. {my_name}입니다.
+
+{date_kor} 영암부부농원 발주 건 처리 결과를 안내드립니다.
+
+■ 발주 요약 : 총 {row_count}건 / {box_total}박스
+{product_table}
+
+■ 운송장 등록 현황 : {tracking_filled}건 / {row_count}건
+   {tracking_note}
+
+■ 첨부 파일 : {attachment_name}
+   - [발주내역] 보내주신 발주 건 전체 + 운송장번호 (상품/수량순 정렬)
+   - [상품별수량] 상품·수량별 건수 집계
+   - [운송장조회] 받는분별 운송장번호 (고객 안내용)
+{change_note}
+■ 다음 발주 안내
+   - 발주서는 매일 오전 {deadline_kor}까지 "(월)월 (일)일 영암부부농원 발주서" 제목으로 보내주세요.
+   - 오전 {deadline_kor} 이후 접수분은 다음 날 발주에 반영됩니다.
+   - 본 자동 접수는 {end_date_kor}까지 운영됩니다.
+
+누락이나 오류 건이 있으면 이 메일로 바로 회신해 주세요.
+감사합니다.
+
+{my_name}
+{my_phone}

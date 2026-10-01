@@ -1,0 +1,75 @@
+name: 영암부부농원 발주 자동화
+
+on:
+  schedule:
+    # 한국시간 10:00 ~ 20:30 사이 30분마다 실행 (GitHub 은 UTC 기준이라 01:00 ~ 11:30 로 적음)
+    # 10:00 에 업체 발주서를 모아 통합발주를 보내고, 이후에는 박경원님 회신만 확인합니다.
+    - cron: '0,30 1-11 * * *'
+  workflow_dispatch:
+    inputs:
+      command:
+        description: '실행할 명령'
+        type: choice
+        default: run
+        options: [run, test-login, collect, check-reply, announce, preview-announcement]
+      date:
+        description: '대상 날짜 (예 2026-10-05). 비우면 오늘'
+        required: false
+      force:
+        description: '완료 표시가 있어도 다시 수행'
+        type: boolean
+        default: false
+      dry_run:
+        description: '실제 발송 없이 테스트'
+        type: boolean
+        default: false
+      to:
+        description: 'announce 전용: 안내문 받을 업체 메일 (쉼표 구분)'
+        required: false
+
+concurrency:
+  group: order-automation
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      # 비밀값은 Settings > Secrets and variables > Actions > Secrets 에 저장
+      NAVER_ID: ${{ secrets.NAVER_ID || 'k333896' }}
+      NAVER_APP_PASSWORD: ${{ secrets.NAVER_APP_PASSWORD }}
+      # 아래는 같은 화면의 Variables 탭에서 바꿀 수 있는 값 (없으면 기본값)
+      MY_NAME: ${{ vars.MY_NAME || '담당자' }}
+      MY_PHONE: ${{ vars.MY_PHONE || '' }}
+      NOTIFY_EMAIL: ${{ vars.NOTIFY_EMAIL || '' }}
+      SUPPLIER_EMAIL: ${{ vars.SUPPLIER_EMAIL || 'kwpark462@naver.com' }}
+      SUPPLIER_NAME: ${{ vars.SUPPLIER_NAME || '박경원' }}
+      COLLECT_TIME: ${{ vars.COLLECT_TIME || '10:00' }}
+      END_DATE: ${{ vars.END_DATE || '2026-10-30' }}
+      SEND_TO_VENDORS: ${{ vars.SEND_TO_VENDORS || 'true' }}
+      VENDOR_MAIL_CC_ME: ${{ vars.VENDOR_MAIL_CC_ME || 'false' }}
+      TZ: Asia/Seoul
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: order_automation/requirements.txt
+
+      - name: 의존성 설치
+        run: pip install -r order_automation/requirements.txt
+
+      - name: 실행
+        working-directory: order_automation
+        run: |
+          CMD="${{ github.event.inputs.command || 'run' }}"
+          ARGS=""
+          [ -n "${{ github.event.inputs.date }}" ] && ARGS="$ARGS --date ${{ github.event.inputs.date }}"
+          [ "${{ github.event.inputs.force }}" = "true" ] && ARGS="$ARGS --force"
+          [ "${{ github.event.inputs.dry_run }}" = "true" ] && ARGS="$ARGS --dry-run"
+          [ -n "${{ github.event.inputs.to }}" ] && ARGS="$ARGS --to ${{ github.event.inputs.to }}"
+          echo "python main.py $CMD $ARGS"
+          python main.py "$CMD" $ARGS
